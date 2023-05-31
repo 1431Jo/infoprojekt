@@ -11,5 +11,11 @@ Aufteilung der Aufgaben:
 
 31.05.23
 - Noah pixelt Boden und Stone (1 Stunde)
-- Lennard implementiert erste Sprites und Audios in den Code (1,5 Stunden)
+- Lennard implementiert erste Sprites und Audios in den Code (1.5 Stunden)
 - Niclas hat Audios zusammen gestellt
+
+- Lennard programmiert den Willkommens Screen (1.5 Stunden)
+- offene Baustellen/nächste Vorhaben:
+      - Hintergrundmusik startet bei jeder Bewegung mit der Maus neu
+      - Main Game muss programmiert werden
+      - die selbst erstellten Designs fehlen
