@@ -45,7 +45,7 @@ def welcome():
                 screen.blit(game_sprites['base'], (baseX,baseY))
                 pygame.mixer_music.load('Sounds\\BG.mp3')
                 pygame.mixer_music.play(-1)
-                pygame.mixer_music.set_volume(.4)
+                pygame.mixer_music.set_volume(.3)
                 pygame.display.update()
                 FPSClock.tick(FPS)
 
