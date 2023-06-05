@@ -1,3 +1,8 @@
+Genutzte Quellen: https://copyassignment.com/flappy-bird-in-python-pygame-with-source-code/ (letzter Aufruf: 05.06.2023)
+
+Audio Quellen: #folgen
+
+
 16.05.23
 Aufteilung der Aufgaben:
   - Noah designed Spieler, Hintergründe, usw
@@ -23,8 +28,12 @@ Aufteilung der Aufgaben:
  - Noah pixelt gameover-screen, Home, retry-button und exit-button (2,5 Stunden)
 
 05.06.23
-- Lennard updated die alten Sprites zu den neuen
+- Lennard updated die alten Sprites zu den neuen (15 min)
+- Niclas und Lennard programmieren zusammen das Grundgerüst des Hauptspieles (2.5 bis 3 Stunden)
 - weitere Baustellen:
-      - Hintergrundmusik startet bei jeder Bewegung mit der Maus neu
-      - Main Game muss programmiert werden
-      - base.png fehlt
+      - Hintergrundmusik startet bei jeder Bewegung mit der Maus neu (nur im Titelscreen)
+      - Kollisionen und damit verbundenes Spielende fehlt
+      - Gameover Screen muss eingebunden werden
+      - Score (eventuell auch ein High Score)
+- offene Ideen:
+      - (eventuelles Easter Egg bei ca. 999 Punkten (als 'Sieg'))

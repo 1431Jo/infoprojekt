@@ -2,6 +2,8 @@ import random
 import sys
 import pygame
 from pygame.locals import*
+#Quelle für den gesamten Code: https://copyassignment.com/flappy-bird-in-python-pygame-with-source-code/
+
 
 FPS = 32
 width = 289
@@ -12,7 +14,7 @@ game_sprites = {}
 game_sounds = {}
 player = 'SPRITES\\bird.png' #Spieler design
 background = 'SPRITES\\bg.png' #hintergrund design
-stones = 'SPRITES\\pipe.png' #desing der im original pipes
+pipe = 'SPRITES\\pipe.png' #desing der im original pipes
 
 #Willkommens Screen
 def welcome():
@@ -33,6 +35,7 @@ def welcome():
             #Aktivierung des Playbuttons
             elif playbutton.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    pygame.mixer.music.rewind()
                     game()
             #Einfügen der Sprites
             else:
@@ -41,10 +44,105 @@ def welcome():
                 screen.blit(game_sprites['message'], (messagex,messagey))
                 screen.blit(game_sprites['base'], (baseX,baseY))
                 pygame.mixer_music.load('Sounds\\BG.mp3')
-                pygame.mixer_music.play()
+                pygame.mixer_music.play(-1)
                 pygame.mixer_music.set_volume(.4)
                 pygame.display.update()
                 FPSClock.tick(FPS)
+
+#Hauptspiel
+def game():
+    score = 0
+    playerx = int(width/5)
+    playery = int(height/2)
+    baseX = 0
+
+    newPipe1 = getRandomPipes()
+    newPipe2 = getRandomPipes()
+
+    upperPipes = [
+        {'x':width + 200, 'y': newPipe1[0]['y']}, 
+        {'x':width + 200 + (width/2), 'y': newPipe2[0]['y']}
+    ]
+
+    lowerPipes = [
+        {'x':width + 200, 'y': newPipe1[1]['y']}, 
+        {'x':width + 200 + (width/2), 'y': newPipe2[1]['y']}
+    ]
+
+    pipeVelX = -4 #Geschwindigkeit der Pipes
+    playerVelY = -9 #Geschwindigkeit des Spielers
+    playerMaxVelY = 10 #Max. Geschwindigkeit des Spielers
+    playerMinVelY = -8 #Min. Geschwindigkeit des Spielers
+    playerAccY = 1  #Geschwindigkeit des Spielers auf der Y Achse
+
+    playerFlapAccv = -8 #Geschwindigkeit der Fledermaus beim fliegen
+    playerFlapped = False #True -> Fledermaus bewegt sich
+
+    while True:
+        for event in pygame.event.get():
+
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                pygame.quit()
+                sys.exit()
+            
+            if event.type == KEYDOWN and (event.key == K_SPACE or event.key == K_UP):
+                if playery > 0:
+                    playerVelY = playerFlapAccv
+                    playerFlapped = True
+                    game_sounds['swoosh'].play()
+            
+        if playerVelY <playerMaxVelY and not playerFlapped:
+                playerVelY += playerAccY
+            
+        if playerFlapped:
+                playerFlapped = False
+
+        playerHeight = game_sprites['player'].get_height()
+        playery = playery + min(playerVelY, baseY - playery - playerHeight)
+
+        """
+        Es folgen die Bewegungen und Logik der Pipes
+        """
+        # Pipe bewegen sich nach links
+        for upperPipe, lowerPipe in zip(upperPipes, lowerPipes):
+            upperPipe['x'] += pipeVelX
+            lowerPipe['x'] += pipeVelX
+
+        # erstellen einer neuen Pipe wenn die alte den Screen verlässt
+        if 0<upperPipes[0]['x']<5:
+            newpipe = getRandomPipes()
+            upperPipes.append(newpipe[0])
+            lowerPipes.append(newpipe[1])
+
+        # löschen der verschwundenen Pipes
+        if upperPipes[0]['x'] < -game_sprites['pipe'][0].get_width():
+            upperPipes.pop(0)
+            lowerPipes.pop(0)
+
+        """
+        implimentieren der Sprites
+        """
+        screen.blit(game_sprites['background'], (0, 0))
+        for upperPipe, lowerPipe in zip(upperPipes, lowerPipes):
+            screen.blit(game_sprites['pipe'][0], (upperPipe['x'], upperPipe['y']))
+            screen.blit(game_sprites['pipe'][1], (lowerPipe['x'], lowerPipe['y']))
+        
+        screen.blit(game_sprites['base'], (baseX, baseY))
+        screen.blit(game_sprites['player'], (playerx, playery))
+        pygame.display.update()
+        FPSClock.tick(FPS)
+
+def getRandomPipes():
+    pipeHeight = game_sprites['pipe'][0].get_height()
+    offset = height/4.5
+    y2 = offset + random.randrange(0, int(height - game_sprites['base'].get_height()-1.2*offset))
+    pipeX = width + 10
+    y1 = pipeHeight - y2 + offset
+    pipe = [ 
+        {'x': pipeX, 'y': -y1}, #upper Pipe
+        {'x': pipeX, 'y': y2} #lower Pipe
+    ]
+    return pipe
 
 if __name__ == '__main__':
     pygame.init()
@@ -70,7 +168,7 @@ if __name__ == '__main__':
     game_sprites['player'] = pygame.image.load(player).convert_alpha()
     game_sprites['message'] = pygame.image.load('SPRITES\\message.png').convert_alpha()
     game_sprites['base'] = pygame.image.load('SPRITES\\base.png').convert_alpha()
-    game_sprites['stones'] = (pygame.transform.rotate(pygame.image.load(stones).convert_alpha(),180), pygame.image.load(stones).convert_alpha()) #180 steht für das Drehen um 180 Grad der Steine
+    game_sprites['pipe'] = (pygame.transform.rotate(pygame.image.load(pipe).convert_alpha(),180), pygame.image.load(pipe).convert_alpha()) #180 steht für das Drehen um 180 Grad der Steine
 
     game_sounds['die'] = pygame.mixer.Sound('Sounds\\Tod.mp3')
     game_sounds['point'] = pygame.mixer.Sound('Sounds\\Coin.mp3')
