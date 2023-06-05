@@ -10,9 +10,9 @@ screen = pygame.display.set_mode((width, height))
 baseY = height*0.8 #höhe der grundfläche
 game_sprites = {}
 game_sounds = {}
-player = 'Infoprojekt\\SPRITES\\bird.png' #Spieler design
-background = 'Infoprojekt\\SPRITES\\bg.png' #hintergrund design
-stones = 'Infoprojekt\\SPRITES\\pipe.png' #desing der im original pipes
+player = 'SPRITES\\bird.png' #Spieler design
+background = 'SPRITES\\bg.png' #hintergrund design
+stones = 'SPRITES\\pipe.png' #desing der im original pipes
 
 #Willkommens Screen
 def welcome():
@@ -41,7 +41,7 @@ def welcome():
                 screen.blit(game_sprites['player'],(playerx,playery))
                 screen.blit(game_sprites['message'], (messagex,messagey))
                 screen.blit(game_sprites['base'], (baseX,baseY))
-                pygame.mixer_music.load('Infoprojekt\\Sounds\\BG.mp3')
+                pygame.mixer_music.load('Sounds\\BG.mp3')
                 pygame.mixer_music.play()
                 pygame.mixer_music.set_volume(.4)
                 pygame.display.update()
@@ -55,27 +55,27 @@ if __name__ == '__main__':
     # sprites laden
 
     game_sprites['numbers'] = (
-        pygame.image.load('Infoprojekt\\SPRITES\\0.png').convert_alpha(), #0
-        pygame.image.load('Infoprojekt\\SPRITES\\1.png').convert_alpha(), #1
-        pygame.image.load('Infoprojekt\\SPRITES\\2.png').convert_alpha(), #2
-        pygame.image.load('Infoprojekt\\SPRITES\\3.png').convert_alpha(), #3
-        pygame.image.load('Infoprojekt\\SPRITES\\4.png').convert_alpha(), #4
-        pygame.image.load('Infoprojekt\\SPRITES\\5.png').convert_alpha(), #5
-        pygame.image.load('Infoprojekt\\SPRITES\\6.png').convert_alpha(), #6
-        pygame.image.load('Infoprojekt\\SPRITES\\7.png').convert_alpha(), #7
-        pygame.image.load('Infoprojekt\\SPRITES\\8.png').convert_alpha(), #8
-        pygame.image.load('Infoprojekt\\SPRITES\\9.png').convert_alpha(), #9
+        pygame.image.load('SPRITES\\0.png').convert_alpha(), #0
+        pygame.image.load('SPRITES\\1.png').convert_alpha(), #1
+        pygame.image.load('SPRITES\\2.png').convert_alpha(), #2
+        pygame.image.load('SPRITES\\3.png').convert_alpha(), #3
+        pygame.image.load('SPRITES\\4.png').convert_alpha(), #4
+        pygame.image.load('SPRITES\\5.png').convert_alpha(), #5
+        pygame.image.load('SPRITES\\6.png').convert_alpha(), #6
+        pygame.image.load('SPRITES\\7.png').convert_alpha(), #7
+        pygame.image.load('SPRITES\\8.png').convert_alpha(), #8
+        pygame.image.load('SPRITES\\9.png').convert_alpha(), #9
     )
 
     game_sprites['background'] = pygame.image.load(background).convert_alpha()
     game_sprites['player'] = pygame.image.load(player).convert_alpha()
-    game_sprites['message'] = pygame.image.load('Infoprojekt\\SPRITES\\message.png').convert_alpha()
-    game_sprites['base'] = pygame.image.load('Infoprojekt\\SPRITES\\base.png').convert_alpha()
+    game_sprites['message'] = pygame.image.load('SPRITES\\message.png').convert_alpha()
+    game_sprites['base'] = pygame.image.load('SPRITES\\base.png').convert_alpha()
     game_sprites['stones'] = (pygame.transform.rotate(pygame.image.load(stones).convert_alpha(),180), pygame.image.load(stones).convert_alpha()) #180 steht für das Drehen um 180 Grad der Steine
 
-    game_sounds['die'] = pygame.mixer.Sound('Infoprojekt\\Sounds\\Tod.mp3')
-    game_sounds['point'] = pygame.mixer.Sound('Infoprojekt\\Sounds\\Coin.mp3')
-    game_sounds['swoosh'] = pygame.mixer.Sound('Infoprojekt\\Sounds\\Jump.mp3')
+    game_sounds['die'] = pygame.mixer.Sound('Sounds\\Tod.mp3')
+    game_sounds['point'] = pygame.mixer.Sound('Sounds\\Coin.mp3')
+    game_sounds['swoosh'] = pygame.mixer.Sound('Sounds\\Jump.mp3')
 
 while True:
     welcome()
