@@ -11,7 +11,7 @@ baseY = height*0.8 #höhe der grundfläche
 game_sprites = {}
 game_sounds = {}
 player = 'Infoprojekt\\SPRITES\\bird.png' #Spieler design
-background = 'Infoprojekt\\SPRITES\\bg.jpeg' #hintergrund design
+background = 'Infoprojekt\\SPRITES\\bg.png' #hintergrund design
 stones = 'Infoprojekt\\SPRITES\\pipe.png' #desing der im original pipes
 
 #Willkommens Screen
