@@ -33,7 +33,6 @@ def welcome():
             #Aktivierung des Playbuttons
             elif playbutton.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    pygame.mixer_music.pause()
                     game()
             #Einfügen der Sprites
             else:
