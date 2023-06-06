@@ -167,7 +167,8 @@ def gameOver():
     screen.blit(game_sprites['base'], (0,baseY))
     screen.blit(game_sprites['over'], (0,0))
     screen.blit(game_sprites['Score'], (30,310))
-    screen.blit(game_sprites['numbers'][score], (150, 310))
+    for _ in range(score):
+        screen.blit(game_sprites['numbers'][score], (150, 310))
  
     pygame.display.update()
 
