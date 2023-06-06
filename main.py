@@ -37,6 +37,8 @@ def welcome():
             #Aktivierung des Playbuttons
             elif playbutton.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    global score
+                    score = 0
                     pygame.mixer.music.rewind()
                     pygame.mixer.music.play()
                     game()
