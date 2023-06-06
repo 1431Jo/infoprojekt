@@ -1,3 +1,4 @@
+import time
 import random
 import sys
 import pygame
@@ -13,8 +14,9 @@ baseY = height*0.8 #höhe der grundfläche
 game_sprites = {}
 game_sounds = {}
 player = 'SPRITES\\bird.png' #Spieler design
-background = 'SPRITES\\bg.png' #hintergrund design
+background = 'SPRITES\\bg.png' #hintergrund designs
 pipe = 'SPRITES\\pipe.png' #desing der im original pipes
+score = 0
 
 #Willkommens Screen
 def welcome():
@@ -36,6 +38,7 @@ def welcome():
             elif playbutton.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     pygame.mixer.music.rewind()
+                    pygame.mixer.music.play()
                     game()
             #Einfügen der Sprites
             else:
@@ -43,15 +46,11 @@ def welcome():
                 screen.blit(game_sprites['player'],(playerx,playery))
                 screen.blit(game_sprites['message'], (messagex,messagey))
                 screen.blit(game_sprites['base'], (baseX,baseY))
-                pygame.mixer_music.load('Sounds\\BG.mp3')
-                pygame.mixer_music.play(-1)
-                pygame.mixer_music.set_volume(.3)
                 pygame.display.update()
                 FPSClock.tick(FPS)
 
 #Hauptspiel
 def game():
-    score = 0
     playerx = int(width/5)
     playery = int(height/2)
     baseX = 0
@@ -90,7 +89,22 @@ def game():
                     playerVelY = playerFlapAccv
                     playerFlapped = True
                     game_sounds['swoosh'].play()
-            
+        
+        # collisons
+        crashTest = Collisions(playerx, playery, upperPipes, lowerPipes)
+        if crashTest:
+            return
+
+        # mitzählen des scores
+        global score
+        playerMidPos = playerx + game_sprites['player'].get_width()/2
+        for pipe in upperPipes:
+            pipeMidPos = pipe['x'] + game_sprites['pipe'][0].get_width()/2
+            if pipeMidPos <= playerMidPos < pipeMidPos + 4:
+                score += 1
+                game_sounds['point'].play()
+                game_sounds['point'].set_volume(.3)
+
         if playerVelY <playerMaxVelY and not playerFlapped:
                 playerVelY += playerAccY
             
@@ -129,8 +143,40 @@ def game():
         
         screen.blit(game_sprites['base'], (baseX, baseY))
         screen.blit(game_sprites['player'], (playerx, playery))
+
+        myDigits = [int(x) for x in list(str(score))]
+        Dwidth = 0
+        for digits in myDigits:
+            Dwidth += game_sprites['numbers'][digits].get_width()
+        Xoffset = (width - Dwidth)/2
+        for digits in myDigits:
+            screen.blit(game_sprites["numbers"][digits], (Xoffset, height*0.12))
+            Xoffset += game_sprites['numbers'][digits].get_width()
+
         pygame.display.update()
         FPSClock.tick(FPS)
+
+def gameOver():
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption('Flappy Bat')
+    game_sprites['over'] = pygame.image.load('SPRITES\\gameover.png').convert_alpha()
+    game_sprites['Score'] = pygame.image.load('SPRITES\\retry.png').convert_alpha()
+    screen.blit(game_sprites['background'], (0,0))
+    screen.blit(game_sprites['base'], (0,baseY))
+    screen.blit(game_sprites['over'], (0,0))
+    screen.blit(game_sprites['Score'], (30,310))
+    screen.blit(game_sprites['numbers'][score], (150, 310))
+ 
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                pygame.quit()
+                sys.exit()
+
+            if event.type == KEYDOWN and event.key == K_n:
+                welcome()
 
 def getRandomPipes():
     pipeHeight = game_sprites['pipe'][0].get_height()
@@ -143,6 +189,33 @@ def getRandomPipes():
         {'x': pipeX, 'y': y2} #lower Pipe
     ]
     return pipe
+
+def Collisions(playerx, playery, upperPipes, lowerPipes):
+    # Spieler berührt den Boden
+    if playery> baseY - 25 or playery<0:
+        game_sounds['die'].play()
+        pygame.mixer_music.stop()
+
+        gameOver()
+    
+    # Spieler berührt die obere Pipe
+    for pipe in upperPipes:
+        pipeHeight = game_sprites['pipe'][0].get_height()
+        if(playery < pipeHeight + pipe['y'] and abs(playerx - pipe['x']) < game_sprites['pipe'][0].get_width() - 20):
+            game_sounds['die'].play()
+            pygame.mixer_music.stop()
+
+            gameOver()
+    
+    # Spieler berührt die untere Pipe
+    for pipe in lowerPipes:
+        if (playery + game_sprites['player'].get_height() > pipe['y']) and abs(playerx - pipe['x']) < game_sprites['pipe'][0].get_width()-20:
+            game_sounds['die'].play()
+            pygame.mixer_music.stop()
+
+            gameOver() 
+    
+    return False
 
 if __name__ == '__main__':
     pygame.init()
@@ -173,6 +246,10 @@ if __name__ == '__main__':
     game_sounds['die'] = pygame.mixer.Sound('Sounds\\Tod.mp3')
     game_sounds['point'] = pygame.mixer.Sound('Sounds\\Coin.mp3')
     game_sounds['swoosh'] = pygame.mixer.Sound('Sounds\\Jump.mp3')
+
+    pygame.mixer_music.load('Sounds\\BG.mp3')
+    pygame.mixer_music.play(-1)
+    pygame.mixer_music.set_volume(.3)
 
 while True:
     welcome()
