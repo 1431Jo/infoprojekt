@@ -162,13 +162,23 @@ def gameOver():
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Flappy Bat')
     game_sprites['over'] = pygame.image.load('SPRITES\\gameover.png').convert_alpha()
-    game_sprites['Score'] = pygame.image.load('SPRITES\\retry.png').convert_alpha()
+    game_sprites['Score'] = pygame.image.load('SPRITES\\Score.png').convert_alpha()
     screen.blit(game_sprites['background'], (0,0))
     screen.blit(game_sprites['base'], (0,baseY))
     screen.blit(game_sprites['over'], (0,0))
-    screen.blit(game_sprites['Score'], (30,310))
-    for _ in range(score):
-        screen.blit(game_sprites['numbers'][score], (150, 310))
+    screen.blit(game_sprites['Score'], (60,230))
+
+    score_digits = [int(x) for x in str(score)]
+    x_offset = 210
+    y_offset = 226
+
+    for digit in score_digits:
+        digit_image = game_sprites['numbers'][digit]
+        digit_rect = digit_image.get_rect()
+        digit_rect.topleft = (x_offset, y_offset)
+        screen.blit(digit_image, digit_rect)
+
+        x_offset += digit_rect.width + 2  # Füge einen horizontalen Abstand zwischen den Ziffern hinzu
  
     pygame.display.update()
 
