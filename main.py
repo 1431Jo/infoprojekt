@@ -169,8 +169,8 @@ def gameOver():
     screen.blit(game_sprites['Score'], (60,230))
 
     score_digits = [int(x) for x in str(score)]
-    x_offset = 210
-    y_offset = 226
+    x_offset = 165
+    y_offset = 230
 
     for digit in score_digits:
         digit_image = game_sprites['numbers'][digit]
