@@ -4,6 +4,10 @@ import sys
 import pygame
 from pygame.locals import*
 #Quelle für den gesamten Code: https://copyassignment.com/flappy-bird-in-python-pygame-with-source-code/
+"""
+Quelle für ChatGPT: ChatGPT, Ich bekomme den Error 'int' object is not subscriptable in der Zeile screen.blit(game_sprites['numbers'][score], (210, 226))
+Mein Code: 'SpielCode wurde eingefügt', Ändere den Code so ab, dass die Ziffern an der Stelle 210 und 230 angezeigt werden, 07.06.2023
+"""
 
 
 FPS = 32
